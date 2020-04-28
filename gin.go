@@ -13,8 +13,8 @@ import (
 )
 
 type JokeAPIResponseBody struct {
-	CreatedAt  string        `json:"created_at"`
-	Value      string        `json:"value"`
+	CreatedAt string `json:"created_at"`
+	Value     string `json:"value"`
 }
 
 type Joke struct {
@@ -103,6 +103,8 @@ func CreateJokeTable(db *pg.DB) error {
 	opts := orm.CreateTableOptions{
 		IfNotExists: true,
 	}
+
+	log.Printf("Creating table in " + db.Options().Addr)
 
 	createError := db.CreateTable(&Joke{}, &opts)
 

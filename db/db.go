@@ -14,6 +14,12 @@ func Connect() *pg.DB {
 		Database: getEnv("QOVERY_DATABASE_MY_DB_DATABASE", "postgres"),
 	}
 
+	log.Printf("Prepared PostgreSQL connection")
+	log.Printf(opts.User)
+	log.Printf(opts.Password)
+	log.Printf(opts.Addr)
+	log.Printf(opts.Database)
+
 	var db *pg.DB = pg.Connect(opts)
 
 	if db == nil {
