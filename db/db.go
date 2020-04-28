@@ -15,10 +15,10 @@ func Connect() *pg.DB {
 	}
 
 	log.Printf("Prepared PostgreSQL connection")
-	log.Printf(opts.User)
-	log.Printf(opts.Password)
-	log.Printf(opts.Addr)
-	log.Printf(opts.Database)
+	log.Printf("User " + opts.User)
+	log.Printf("Password " + opts.Password)
+	log.Printf("Addr " + opts.Addr)
+	log.Printf("Database " + opts.Database)
 
 	var db *pg.DB = pg.Connect(opts)
 
