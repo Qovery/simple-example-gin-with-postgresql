@@ -1,0 +1,18 @@
+application:
+  name: simple-example-gin-with-postgresql
+  project: simple-example-gin-with-postgresql
+  cloud_region: aws/eu-west-3
+  publicly_accessible: true
+databases:
+  - type: postgresql
+    version: "11.5"
+    name: my-db
+routers:
+  - name: main
+    custom_domains:
+      - branch: master
+        domain: gin.algo.green
+    routes:
+      - application_name: simple-example-gin-with-postgresql
+        paths:
+          - /
