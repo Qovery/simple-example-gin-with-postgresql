@@ -3,8 +3,6 @@ package main
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"github.com/go-pg/pg/v9"
-	"github.com/go-pg/pg/v9/orm"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -17,17 +15,10 @@ type JokeAPIResponseBody struct {
 	Value     string `json:"value"`
 }
 
-type Joke struct {
-	Content string    `json:"content"`
-	AddedAt time.Time `json:"added_at"`
-}
-
 func main() {
 	r := gin.Default()
 
 	postgres := db.Connect()
-
-	CreateJokeTable(postgres)
 
 	r.GET("/", func(c *gin.Context) {
 		resp, err := http.Get("https://api.chucknorris.io/jokes/random")
@@ -48,28 +39,17 @@ func main() {
 
 		print(jokeRes.Value)
 
-		joke := Joke{
+		joke := db.Joke{
 			Content: jokeRes.Value,
 			AddedAt: time.Now(),
 		}
 
-		jokes := []Joke{joke}
+		jokes := []db.Joke{joke}
 
-		insert, err := postgres.Model(&jokes).Insert(&jokes)
+		_, err = postgres.Model(&jokes).Insert(&jokes)
 
 		if err != nil {
 			log.Printf("Error while inserting a new Joke to the database, reason: %v\n", err)
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"status":  http.StatusInternalServerError,
-				"message": "Something went wrong",
-			})
-			return
-		}
-
-		print(insert.RowsAffected())
-
-		if err != nil {
-			log.Printf("Error while a new Joke, reason: %v\n", err)
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"status":  http.StatusInternalServerError,
 				"message": "Something went wrong",
@@ -97,22 +77,4 @@ func main() {
 	})
 
 	r.Run()
-}
-
-func CreateJokeTable(db *pg.DB) error {
-	opts := orm.CreateTableOptions{
-		IfNotExists: true,
-	}
-
-	log.Printf("Creating table in " + db.Options().Addr)
-
-	createError := db.CreateTable(&Joke{}, &opts)
-
-	if createError != nil {
-		log.Printf("Error while creating Jokes table, reason: %v\n", createError)
-		return createError
-	}
-
-	log.Printf("Jokes table created")
-	return nil
 }
