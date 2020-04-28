@@ -10,7 +10,7 @@ func Connect() *pg.DB {
 	opts := &pg.Options{
 		User:     getEnv("QOVERY_DATABASE_MY_DB_USERNAME", "postgres"),
 		Password: getEnv("QOVERY_DATABASE_MY_DB_PASSWORD", "postgres"),
-		Addr:     getEnv("QOVERY_DATABASE_MY_DB_HOST", "localhost"),
+		Addr:     getEnv("QOVERY_DATABASE_MY_DB_HOST", "localhost") + ":" + getEnv("QOVERY_DATABASE_MY_DB_PORT", "5432"),
 		Database: getEnv("QOVERY_DATABASE_MY_DB_DATABASE", "postgres"),
 	}
 
