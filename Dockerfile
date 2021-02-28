@@ -18,7 +18,7 @@ FROM alpine:latest
 
 RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
 
-RUN mkdir -p /ap
+RUN mkdir -p /app
 WORKDIR /app
 COPY --from=builder /app .
 
